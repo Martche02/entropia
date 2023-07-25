@@ -1,5 +1,6 @@
 import numpy as np
 import scipy
+import matplotlib.pyplot as plt
 class distribuicao:
     media = 0
     desvioPadrao = 1
@@ -59,8 +60,21 @@ class distribuicao:
         hV **= -1
         print(hV)
         return hV
-
-dist = distribuicao(3)
-dist.addPonto(3, 1,1,1)
-dist.desvio_padrao()
-dist.gaussianas()
+    def densidade(self, x, y, z):
+        d = 0.0
+        for i in self.pontos:
+            d += np.exp(-0.5*self.norma(self.distancia_entre_pontos([x,y,z],i))**2)*(2*np.pi)**(-0.5)
+        return d/(len(self.pontos)*(2*np.pi)**(-0.5))
+    def plot(self, n):
+        X = [3*x/n-1.5 for x in range(n+1)]
+        Y, Z = X, X
+        fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+        ax.set_title('Ambiente de Plotagem 3D', fontsize=18)
+        ax.set_xlabel('Eixo X', fontsize=15)
+        ax.set_ylabel('Eixo Y', fontsize=15)
+        ax.set_zlabel('Eixo Z', fontsize=15)
+        for x in X:
+            for y in Y:
+                for z in Z:
+                    ax.scatter(x, y, z, color=(0.1, 0.2, 0.5, self.densidade(x,y,z)))
+        plt.show()
