@@ -1,18 +1,21 @@
 import numpy as np
-import scipy
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 from scipy.stats import norm
 from scipy.integrate import nquad
 from numba import jit
+
+@jit(nopython=True)
+def dis(p, q):
+    return 1/(np.linalg.norm(p-q))
+    return np.exp(-0.5*np.sum((p - q)**2))*(2*np.pi)**(-0.5)
 
 @jit(nopython=True)
 def calculate_density(points, pontos):
     d = np.zeros(points.shape[0])
     for idx, point in enumerate(points):
         for i in pontos:
-            d[idx] += np.exp(-0.5*np.sum((point - i)**2))*(2*np.pi)**(-0.5)
-    return d/(len(pontos)*(2*np.pi)**(-0.5))
+            d[idx] += dis(point, i)
+    return d #/(len(pontos)*(2*np.pi)**(-0.5))
 
 class distribuicao:
     media = 0
@@ -49,16 +52,20 @@ class distribuicao:
         for i in range(quantidade):
             pontos.append(self.rArr(dimensao))
         return pontos
-
-    def areaGauss(self, dist:int, m=media, desvio=desvioPadrao):
-        return norm.cdf(dist, loc=m, scale=desvio)
+    
+    def area(self, dist):
+        return -1/dist
+        return norm.cdf(dist, loc=media, scale=desvioPadrao)
 
     def hiperVolume(self, a, b, e):
         Vab = np.array([np.sin(b)*np.cos(a), np.sin(b)*np.sin(a), np.cos(b)])
         v = np.array([np.append(ve, np.zeros(3-len(ve))) for ve in e])
-        p = self.norma(Vab) * np.linalg.norm(v, axis=1)**2 / (v @ Vab)
+        p = self.norma(Vab) * self.norma(v, axis=1)**2 / (v @ Vab)
         p = p[p > 0]
-        return self.areaGauss(min(p))-1/2 if len(p) > 0 else 1/2
+        return self.area(min(p))-1/2 if len(p) > 0 else 1/2
+    
+    def hyperVolumeBehind(A,B,C):
+        return nquad(lambda a,b: 1/np.linalg.norm(a*A+b*B+(1-a-b)*C), [lambda b: [0,1-b], lambda: [0, 1]])
 
     def gaussianas(self): 
         n_points = len(self.pontos)
@@ -73,23 +80,20 @@ class distribuicao:
         print(hV)
         return hV
 
-    def densidade(self, points):
-        return calculate_density(points, np.array(self.pontos))
-
-    def plot(self, n, t=2):
+    def plot(self, n=10, t=1):
         X = np.linspace(-1.5, 1.5, n)
         Y = np.linspace(-1.5, 1.5, n)
         Z = np.linspace(-1.5, 1.5, n)
         X, Y, Z = np.meshgrid(X, Y, Z)
         points = np.column_stack((X.flatten(), Y.flatten(), Z.flatten()))
-        dens = self.densidade(points)
+        dens = calculate_density(points, np.array(self.pontos))
         colors = (dens - dens.min()) / (dens.max() - dens.min())
         colors **= t
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
         for i in range(points.shape[0]):
             ax.scatter(points[i, 0], points[i, 1], points[i, 2], color=(0.1, 0.2, 0.5, colors[i]))
-        ax.set_title('Ambiente de Plotagem 3D', fontsize=18)
+        ax.set_title('Ambiente de Simulação', fontsize=18)
         ax.set_xlabel('Eixo X', fontsize=15)
         ax.set_ylabel('Eixo Y', fontsize=15)
         ax.set_zlabel('Eixo Z', fontsize=15)

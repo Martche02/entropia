@@ -1,16 +1,22 @@
-from sympy import symbols, integrate, sqrt, Piecewise
-from sympy.abc import alpha, beta
-from sympy import symbols, integrate, sympify
-from sympy.abc import alpha
+from sympy import symbols, Plane, Point3D, solve, Line
 
-# Define the coordinates of the points
-Ax, Ay, Az, Bx, By, Bz, Cx, Cy, Cz = symbols('Ax Ay Az Bx By Bz Cx Cy Cz')
+# Suponha que você tenha três pontos
+p1 = Point3D(1, 0, 0)
+p2 = Point3D(0, 1, 0)
+p3 = Point3D(0, 0, 1)
 
-# Define the result of the inner integral
-inner_integral = "-log(2*Ax*Bx*alpha - 2*Ax*Cx*alpha + 2*Ay*By*alpha - 2*Ay*Cy*alpha + 2*Az*Bz*alpha - 2*Az*Cz*alpha - 2*Bx*Cx*alpha + 2*Bx*Cx - 2*By*Cy*alpha + 2*By*Cy - 2*Bz*Cz*alpha + 2*Bz*Cz + 2*Cx**2*alpha - 2*Cx**2 + 2*Cy**2*alpha - 2*Cy**2 + 2*Cz**2*alpha - 2*Cz**2 + 2*sqrt(Bx**2 - 2*Bx*Cx + By**2 - 2*By*Cy + Bz**2 - 2*Bz*Cz + Cx**2 + Cy**2 + Cz**2)*sqrt(Ax**2*alpha**2 - 2*Ax*Cx*alpha**2 + 2*Ax*Cx*alpha + Ay**2*alpha**2 - 2*Ay*Cy*alpha**2 + 2*Ay*Cy*alpha + Az**2*alpha**2 - 2*Az*Cz*alpha**2 + 2*Az*Cz*alpha + Cx**2*alpha**2 - 2*Cx**2*alpha + Cx**2 + Cy**2*alpha**2 - 2*Cy**2*alpha + Cy**2 + Cz**2*alpha**2 - 2*Cz**2*alpha + Cz**2))/sqrt(Bx**2 - 2*Bx*Cx + By**2 - 2*By*Cy + Bz**2 - 2*Bz*Cz + Cx**2 + Cy**2 + Cz**2) + log(2*Ax*Bx*alpha - 2*Ax*Cx*alpha + 2*Ay*By*alpha - 2*Ay*Cy*alpha + 2*Az*Bz*alpha - 2*Az*Cz*alpha - 2*Bx*Cx*alpha + 2*Bx*Cx - 2*By*Cy*alpha + 2*By*Cy - 2*Bz*Cz*alpha + 2*Bz*Cz + 2*Cx**2*alpha - 2*Cx**2 + 2*Cy**2*alpha - 2*Cy**2 + 2*Cz**2*alpha - 2*Cz**2 + (1 - alpha)*(2*Bx**2 - 4*Bx*Cx + 2*By**2 - 4*By*Cy + 2*Bz**2 - 4*Bz*Cz + 2*Cx**2 + 2*Cy**2 + 2*Cz**2) + 2*sqrt(Bx**2 - 2*Bx*Cx + By**2 - 2*By*Cy + Bz**2 - 2*Bz*Cz + Cx**2 + Cy**2 + Cz**2)*sqrt(Ax**2*alpha**2 - 2*Ax*Cx*alpha**2 + 2*Ax*Cx*alpha + Ay**2*alpha**2 - 2*Ay*Cy*alpha**2 + 2*Ay*Cy*alpha + Az**2*alpha**2 - 2*Az*Cz*alpha**2 + 2*Az*Cz*alpha + Cx**2*alpha**2 - 2*Cx**2*alpha + Cx**2 + Cy**2*alpha**2 - 2*Cy**2*alpha + Cy**2 + Cz**2*alpha**2 - 2*Cz**2*alpha + Cz**2 + (1 - alpha)**2*(Bx**2 - 2*Bx*Cx + By**2 - 2*By*Cy + Bz**2 - 2*Bz*Cz + Cx**2 + Cy**2 + Cz**2) + (1 - alpha)*(2*Ax*Bx*alpha - 2*Ax*Cx*alpha + 2*Ay*By*alpha - 2*Ay*Cy*alpha + 2*Az*Bz*alpha - 2*Az*Cz*alpha - 2*Bx*Cx*alpha + 2*Bx*Cx - 2*By*Cy*alpha + 2*By*Cy - 2*Bz*Cz*alpha + 2*Bz*Cz + 2*Cx**2*alpha - 2*Cx**2 + 2*Cy**2*alpha - 2*Cy**2 + 2*Cz**2*alpha - 2*Cz**2)))/sqrt(Bx**2 - 2*Bx*Cx + By**2 - 2*By*Cy + Bz**2 - 2*Bz*Cz + Cx**2 + Cy**2 + Cz**2), Ne(Bx**2 - 2*Bx*Cx + By**2 - 2*By*Cy + Bz**2 - 2*Bz*Cz + Cx**2 + Cy**2 + Cz**2, 0) | (Ne(Bx**2 - 2*Bx*Cx + By**2 - 2*By*Cy + Bz**2 - 2*Bz*Cz + Cx**2 + Cy**2 + Cz**2, 0) & Ne(2*Ax*Bx*alpha - 2*Ax*Cx*alpha + 2*Ay*By*alpha - 2*Ay*Cy*alpha + 2*Az*Bz*alpha - 2*Az*Cz*alpha - 2*Bx*Cx*alpha + 2*Bx*Cx - 2*By*Cy*alpha + 2*By*Cy - 2*Bz*Cz*alpha + 2*Bz*Cz + 2*Cx**2*alpha - 2*Cx**2 + 2*Cy**2*alpha - 2*Cy**2 + 2*Cz**2*alpha - 2*Cz**2, 0))), (-2*sqrt(Ax**2*alpha**2 - 2*Ax*Cx*alpha**2 + 2*Ax*Cx*alpha + Ay**2*alpha**2 - 2*Ay*Cy*alpha**2 + 2*Ay*Cy*alpha + Az**2*alpha**2 - 2*Az*Cz*alpha**2 + 2*Az*Cz*alpha + Cx**2*alpha**2 - 2*Cx**2*alpha + Cx**2 + Cy**2*alpha**2 - 2*Cy**2*alpha + Cy**2 + Cz**2*alpha**2 - 2*Cz**2*alpha + Cz**2)/(2*Ax*Bx*alpha - 2*Ax*Cx*alpha + 2*Ay*By*alpha - 2*Ay*Cy*alpha + 2*Az*Bz*alpha - 2*Az*Cz*alpha - 2*Bx*Cx*alpha + 2*Bx*Cx - 2*By*Cy*alpha + 2*By*Cy - 2*Bz*Cz*alpha + 2*Bz*Cz + 2*Cx**2*alpha - 2*Cx**2 + 2*Cy**2*alpha - 2*Cy**2 + 2*Cz**2*alpha - 2*Cz**2) + 2*sqrt(Ax**2*alpha**2 - 2*Ax*Cx*alpha**2 + 2*Ax*Cx*alpha + Ay**2*alpha**2 - 2*Ay*Cy*alpha**2 + 2*Ay*Cy*alpha + Az**2*alpha**2 - 2*Az*Cz*alpha**2 + 2*Az*Cz*alpha + Cx**2*alpha**2 - 2*Cx**2*alpha + Cx**2 + Cy**2*alpha**2 - 2*Cy**2*alpha + Cy**2 + Cz**2*alpha**2 - 2*Cz**2*alpha + Cz**2 + (1 - alpha)*(2*Ax*Bx*alpha - 2*Ax*Cx*alpha + 2*Ay*By*alpha - 2*Ay*Cy*alpha + 2*Az*Bz*alpha - 2*Az*Cz*alpha - 2*Bx*Cx*alpha + 2*Bx*Cx - 2*By*Cy*alpha + 2*By*Cy - 2*Bz*Cz*alpha + 2*Bz*Cz + 2*Cx**2*alpha - 2*Cx**2 + 2*Cy**2*alpha - 2*Cy**2 + 2*Cz**2*alpha - 2*Cz**2))/(2*Ax*Bx*alpha - 2*Ax*Cx*alpha + 2*Ay*By*alpha - 2*Ay*Cy*alpha + 2*Az*Bz*alpha - 2*Az*Cz*alpha - 2*Bx*Cx*alpha + 2*Bx*Cx - 2*By*Cy*alpha + 2*By*Cy - 2*Bz*Cz*alpha + 2*Bz*Cz + 2*Cx**2*alpha - 2*Cx**2 + 2*Cy**2*alpha - 2*Cy**2 + 2*Cz**2*alpha - 2*Cz**2), Ne(2*Ax*Bx*alpha - 2*Ax*Cx*alpha + 2*Ay*By*alpha - 2*Ay*Cy*alpha + 2*Az*Bz*alpha - 2*Az*Cz*alpha - 2*Bx*Cx*alpha + 2*Bx*Cx - 2*By*Cy*alpha + 2*By*Cy - 2*Bz*Cz*alpha + 2*Bz*Cz + 2*Cx**2*alpha - 2*Cx**2 + 2*Cy**2*alpha - 2*Cy**2 + 2*Cz**2*alpha - 2*Cz**2, 0)), ((1 - alpha)/sqrt(Ax**2*alpha**2 - 2*Ax*Cx*alpha**2 + 2*Ax*Cx*alpha + Ay**2*alpha**2 - 2*Ay*Cy*alpha**2 + 2*Ay*Cy*alpha + Az**2*alpha**2 - 2*Az*Cz*alpha**2 + 2*Az*Cz*alpha + Cx**2*alpha**2 - 2*Cx**2*alpha + Cx**2 + Cy**2*alpha**2 - 2*Cy**2*alpha + Cy**2 + Cz**2*alpha**2 - 2*Cz**2*alpha + Cz**2)"
-inner_integral = sympify(inner_integral)
-# Compute the outer integral
-outer_integral = integrate(inner_integral, (alpha, 0, 1))
+# Crie os planos equidistantes à origem
+plane1 = Plane(p1/2, normal_vector=p1)
+plane2 = Plane(p2/2, normal_vector=p2)
+plane3 = Plane(p3/2, normal_vector=p3)
 
-# Print the result
-print(outer_integral)
+# Encontre a linha de intersecção dos dois primeiros planos
+line = plane1.intersection(plane2)[0]
+
+# Agora verifique se essa linha intersecta o terceiro plano
+intersection = plane3.intersection(line)
+
+if intersection:
+    print("A linha intersecta o plano")
+else:
+    print("A linha se estende até o infinito")
